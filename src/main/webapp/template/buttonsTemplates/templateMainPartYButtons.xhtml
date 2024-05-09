@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:body>
+    <div>
+        <h3>Выберите y:</h3>
+        <p:inputText styleClass="y-buttons" id = "yValue" value="#{yButton.data}" validator="#{validatorButtonY.validate}" validatorMessage="Введите число в диапазоне [-3;5]">
+            Введите число от [-3;5]
+        </p:inputText>
+    </div>
+</h:body>
+</html>

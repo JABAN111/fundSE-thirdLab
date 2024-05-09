@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<h:body>
+    <h3>Выберите R:</h3>
+    <div id="rValuesContainer">
+        <p:selectBooleanCheckbox onchange="setRadiusByCheckBox(this,1)" id="RValue1" class = "R" value="#{RButton.availableValues[0].value}" itemLabel="1">
+                            <p:ajax update="RValue1 RValue15 RValue2 RValue25 RValue3" listener="#{RButton.pickButtonProcessing(0)}" />
+        </p:selectBooleanCheckbox>
+        <p:selectBooleanCheckbox onchange="setRadiusByCheckBox(this,1.5)" id="RValue15" class = "R" value="#{RButton.availableValues[1].value}" itemLabel="1.5">
+                        <p:ajax update="RValue1 RValue15 RValue2 RValue25 RValue3" listener="#{RButton.pickButtonProcessing(1)}" />
+        </p:selectBooleanCheckbox>
+        <p:selectBooleanCheckbox onchange="setRadiusByCheckBox(this,2)" id="RValue2" class = "R" value="#{RButton.availableValues[2].value}" itemLabel="2">
+                            <p:ajax update="RValue1 RValue15 RValue2 RValue25 RValue3" listener="#{RButton.pickButtonProcessing(2)}" />
+        </p:selectBooleanCheckbox>
+        <p:selectBooleanCheckbox onchange="setRadiusByCheckBox(this,2.5)" id="RValue25" class = "R" value="#{RButton.availableValues[3].value}" itemLabel="2.5">
+                            <p:ajax update="RValue1 RValue15 RValue2 RValue25 RValue3" listener="#{RButton.pickButtonProcessing(3)}" />
+
+        </p:selectBooleanCheckbox>
+        <p:selectBooleanCheckbox onchange="setRadiusByCheckBox(this,3)" id="RValue3" class = "R" value="#{RButton.availableValues[4].value}" itemLabel="3">
+                            <p:ajax update="RValue1 RValue15 RValue2 RValue25 RValue3" listener="#{RButton.pickButtonProcessing(4)}" />
+        </p:selectBooleanCheckbox>
+    </div>
+</h:body>
+</html>

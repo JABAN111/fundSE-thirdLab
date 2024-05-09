@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Основная страница</title>
+    <h:outputStylesheet name="style.css" library="style" />
+    <meta name="description" content="Web-programming third lab"/>
+    <meta name="author" content="Niagin Mikhail Alexeyevich"/>
+</h:head>
+<h:body>
+    <div id = "page">
+        <div id="head">
+            <ui:insert name ="header">
+                <ui:include src="/template/headers/templateHeader.xhtml"/>
+            </ui:insert>
+        </div>
+
+        <div id = "main-button">
+            <h:link styleClass="toStart" outcome="startPage.xhtml">
+                На стартовую страницу
+            </h:link>
+        </div>
+
+            <ui:insert name = "main_body">
+                <h:form id="main-form">
+                    <canvas id="myCanvas" width="350" height="350"> </canvas>
+                    <ui:include src="/template/buttonsTemplates/templateMainPartXbuttons.xhtml"/>
+                    <ui:include src="/template/buttonsTemplates/templateMainPartYButtons.xhtml"/>
+                    <ui:include src="/template/buttonsTemplates/templateMainPartRbuttons.xhtml"/>
+                    <h:commandButton id = "submitButton" styleClass="submit-button" value="Отправить">
+                        <f:ajax execute="@form"
+                                listener="#{Controller.addResult(xButton.data, yButton.data,RButton.pickedR)}"
+                                render="results-table"/>
+                    </h:commandButton>
+                </h:form>
+
+                <h:commandButton id = "deleteButton" styleClass="delete-button" value="Стереть все">
+                    <f:ajax listener="#{Controller.cleanResults()}"
+                            render="results-table hitStatus"
+                    />
+                </h:commandButton>
+
+                <h:form id="clicking-form">
+                    <h:inputText style="display: none" id="xHidden" value="#{xButton.clickData}"/>
+                    <h:inputText style="display: none" id="clickingYHidden" value="#{yButton.clickData}"/>
+                    <p:commandButton id="click-submit" value="autoClick" style="display: none">
+                        <f:ajax execute="@form"
+                                listener="#{Controller.addResult(xButton.clickData, yButton.clickData, RButton.pickedR)}"
+                                render="results-table rHidden xHidden clickingYHidden"
+                        />
+                    </p:commandButton>
+                </h:form>
+                <h:dataTable id="results-table" border="1" var="result" value="#{Controller.results}">
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Значение x"/>
+                        </f:facet>
+                        <h:outputText id="xResult" value="#{result.x}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Значение y"/>
+                        </f:facet>
+                        <h:outputText  id="yResult" value="#{result.y}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Значение r"/>
+                        </f:facet>
+                        <h:outputText id = "rResult" value="#{result.r}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Статус попадания"/>
+                        </f:facet>
+                        <h:outputText id="HitResult" value="#{result.status ? '✅' : '❌'}"/>
+                    </h:column>
+                </h:dataTable>
+            </ui:insert>
+    </div>
+    <h:outputScript name="scripts/image.js" />
+    <h:outputScript name="scripts/script.js"/>
+</h:body>
+</html>

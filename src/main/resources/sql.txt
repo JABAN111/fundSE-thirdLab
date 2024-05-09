@@ -1,0 +1,10 @@
+DELETE FROM results;
+CREATE TABLE results
+(
+    id SERIAL PRIMARY KEY,
+    x FLOAT NOT NULL CHECK ((-4 <= x) AND (x <= 4)),
+    y FLOAT NOT NULL CHECK ((-3 <= y) AND (y <= 5)),
+    R FLOAT NOT NULL,
+    date DATE,
+    status BOOLEAN
+);
