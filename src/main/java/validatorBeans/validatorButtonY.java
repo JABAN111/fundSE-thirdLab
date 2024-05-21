@@ -20,12 +20,12 @@ public class validatorButtonY implements Validator {
         try {
         double yNum = DotTransformer.dotTransform(value.toString());
             if (!(yNum >= -3 && yNum <= 5)) {
-                FacesMessage message = new FacesMessage("y должен быть в диапазоне [-3;5]\n" +
-                        "Введенное значение: " + value);
+                FacesMessage message = new FacesMessage("y should be in range: [-3;5]\n" +
+                        "Your value is: " + value);
                 throw new ValidatorException(message);
             }
         } catch (NumberFormatException | Error e) {
-            FacesMessage message = new FacesMessage("Введите ЧИСЛО в диапазоне [-3;5]");
+            FacesMessage message = new FacesMessage("Please enter a NUMBER in range: [-3;5]");
             throw new ValidatorException(message);
         }
     }
