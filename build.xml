@@ -4,8 +4,9 @@
 
     <property file="build.properties"/>
 
+
     <path id="classpath">
-        <fileset dir="${lib.dir}" includes="*.jar"/>
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
         <fileset dir="${main.dir}" includes="*.java"/>
     </path>
 
@@ -14,18 +15,18 @@
         <pathelement location="${hamcrest}"/>
         <pathelement location="${classes.dir}"/>
     </path>
-    <target name="clean">
+    <target name="clean" description="удаление скомпилированных классов проекта и всех временных файлов (если они есть).">
         <echo message="cleaning:D"/>
         <delete dir="${build.dir}"/>
     </target>
 
-    <target name="init" depends="clean" description="initialize all necessary folders">
+    <target name="init" depends="clean">
         <echo message="init started..."/>
         <mkdir dir="${classes.dir}"/>
         <mkdir dir="${test.classes.dir}"/>
     </target>
 
-    <target name="compile" depends="init">
+    <target name="compile" depends="init" description="компиляция исходных кодов проекта.">
         <echo message="compile started..."/>
         <javac srcdir="${main.dir}" destdir="${classes.dir}" includeantruntime="false">
             <classpath refid="classpath"/>
@@ -34,7 +35,7 @@
     </target>
 
 
-    <target name="build" depends="compile">
+    <target name="build" depends="compile" description="компиляция исходных кодов проекта и их упаковка в исполняемый jar-архив. Компиляцию исходных кодов реализовать посредством вызова цели compile.">
         <echo message="build started..."/>
         <copy todir="${build.dir}">
             <fileset dir="${web.dir}" includes="**/*"/>
@@ -66,7 +67,7 @@
         <echo message="build finished!"/>
 
     </target>
-    <target name="test" depends="build">
+    <target name="test" depends="build" description="запуск junit-тестов проекта. Перед запуском тестов необходимо осуществить сборку проекта (цель build).">
         <echo message="Test started..."/>
         <mkdir dir="${test.classes.dir}"/>
         <mkdir dir="${junit.report.dir}"/>
@@ -86,7 +87,7 @@
         <echo message="test finished"/>
 
     </target>
-    <target name="scp" depends="test" description="перемещение собранного проекта по scp на выбранный сервер по завершению сборки">
+    <target name="scp" depends="build" description="перемещение собранного проекта по scp на выбранный сервер по завершению сборки. Предварительно необходимо выполнить сборку проекта (цель build)">
         <echo>Sending..</echo>
         <scp file="${build.dir}/${ant.project.name}.war"
              todir="s368601@se.ifmo.ru:~/public_html/third/wildfly-21.0.0.Final/standalone/deployments"
@@ -95,5 +96,35 @@
     </target>
 
 
+    <target name="env" depends="clean" description="осуществляет сборку и запуск программы в альтернативных окружениях;
+    окружение задается версией java и набором аргументов виртуальной машины в файле параметров">
+        <mkdir dir="${test.classes.dir}"/>
+        <mkdir dir="${classes.dir}"/>
+        <echo message="starting classes dir"/>
+        <javac destdir="${classes.dir}" includeantruntime="false" source="${jvm.ver}"
+               target="${jvm.ver}" fork="true">
+            <src path="${src.dir}"/>
+            <classpath refid="classpath"/>
+            <compilerarg line="${jvm.params}"/>
+        </javac>
+        <echo message="starting test classes dir"/>
+        <javac destdir="${test.classes.dir}" includeantruntime="false" source="${jvm.ver}"
+               target="${jvm.ver}" fork="true">
+            <src path="${test.dir}"/>
+            <classpath>
+                <pathelement location="${classes.dir}"/>
+                <path refid="classpath"/>
+            </classpath>
+            <compilerarg line="${jvm.params}"/>
+        </javac>
+        <echo message="BUILD JAR FILE"/>
+        <war destfile="${build.dir}/${ant.project.name}.war" webxml="${build.web.xml}">
+            <fileset dir="${build.dir}"/>
+            <manifest>
+                <attribute name="Manifest-Version" value="1.0"/>
+                <attribute name="Main-Class" value="NoClass"/>
+            </manifest>
+        </war>
+    </target>
 
 </project>
